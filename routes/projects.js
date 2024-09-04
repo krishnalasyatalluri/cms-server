@@ -51,32 +51,32 @@ router.get('/name/:projectId', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching the project' });
     }
 });
-// router.get('/:id', async (req, res) => {
-//     const { id } = req.params;
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
 
-//     try {
-//         // Fetch the project and populate components and subcomponents
-//         const project = await Project.findById(id)
-//             .populate({
-//                 path: 'components',
-//                 model: 'Component',
-//                 populate: {
-//                     path: 'subComponents',
-//                     model: 'SubComponent'
-//                 }
-//             });
+    try {
+        // Fetch the project and populate components and subcomponents
+        const project = await Project.findById(id)
+            .populate({
+                path: 'components',
+                model: 'Component',
+                populate: {
+                    path: 'subComponents',
+                    model: 'SubComponent'
+                }
+            });
 
-//         if (!project) {
-//             return res.status(404).json({ error: 'Project not found' });
-//         }
+        if (!project) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
 
-//         // Send the populated project data as a response
-//         res.status(200).json({ project });
-//     } catch (error) {
-//         console.error('Error fetching project:', error);
-//         res.status(500).json({ error: 'An error occurred while fetching the project' });
-//     }
-// });
+        // Send the populated project data as a response
+        res.status(200).json({ project });
+    } catch (error) {
+        console.error('Error fetching project:', error);
+        res.status(500).json({ error: 'An error occurred while fetching the project' });
+    }
+});
 
  
 // router.get('/all-projects', async (req, res) => {
