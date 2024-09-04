@@ -51,6 +51,28 @@ router.get('/name/:projectId', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching the project' });
     }
 });
+router.get('/all-projects', async (req, res) => {
+    try {
+        // Fetch all projects and populate components and subcomponents
+        const projects = await Project.find({})
+            .populate({
+                path: 'components',
+                populate: {
+                    path: 'subComponents',
+                    model: 'SubComponent'
+                }
+            });
+ 
+        // Logging the projects for debugging
+        console.log(JSON.stringify(projects, null, 2));
+ 
+        // Send the populated projects data as a response
+        res.status(200).json({ projects });
+    } catch (err) {
+        console.error('Error fetching projects:', err);
+        res.status(400).json({ error: err.message });
+    }
+});
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
 
@@ -118,28 +140,7 @@ router.get('/:id', async (req, res) => {
 //         res.status(400).json({ error: err.message });
 //     }
 // });
-router.get('/all-projects', async (req, res) => {
-    try {
-        // Fetch all projects and populate components and subcomponents
-        const projects = await Project.find({})
-            .populate({
-                path: 'components',
-                populate: {
-                    path: 'subComponents',
-                    model: 'SubComponent'
-                }
-            });
- 
-        // Logging the projects for debugging
-        console.log(JSON.stringify(projects, null, 2));
- 
-        // Send the populated projects data as a response
-        res.status(200).json({ projects });
-    } catch (err) {
-        console.error('Error fetching projects:', err);
-        res.status(400).json({ error: err.message });
-    }
-});
+
  
  
 module.exports = router;
